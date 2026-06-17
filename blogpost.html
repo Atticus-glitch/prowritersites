@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ProWriterSites — Sample 2: Blog Post</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #fafaf8;
+      color: #1a1a1a;
+      line-height: 1.8;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      background: #fff;
+      border-bottom: 1px solid #e8e8e4;
+    }
+    nav .logo {
+      font-family: 'Georgia', serif;
+      font-size: 1.15rem;
+      font-weight: bold;
+      letter-spacing: -0.02em;
+    }
+    nav .logo span { color: #2e6bf0; }
+    nav a {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      color: #2e6bf0;
+      text-decoration: none;
+    }
+
+    .post-header {
+      max-width: 720px;
+      margin: 4rem auto 0;
+      padding: 0 1.5rem;
+      text-align: center;
+    }
+    .post-meta {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #2e6bf0;
+      margin-bottom: 1.25rem;
+    }
+    .post-header h1 {
+      font-size: clamp(2rem, 4vw, 3rem);
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+      color: #0f0f0f;
+    }
+    .post-header .deck {
+      font-family: 'Arial', sans-serif;
+      font-size: 1.1rem;
+      color: #666;
+      max-width: 580px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.65;
+    }
+    .byline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.875rem;
+      color: #888;
+      margin-bottom: 3rem;
+    }
+    .byline .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #2e6bf0, #6b9fff);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #fff;
+      font-size: 0.875rem;
+    }
+    .byline strong { color: #444; }
+
+    .divider {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+      border: none;
+      border-top: 1px solid #e8e8e4;
+      margin-bottom: 3rem;
+    }
+
+    /* HERO IMAGE PLACEHOLDER */
+    .post-hero {
+      max-width: 760px;
+      margin: 0 auto 3.5rem;
+      padding: 0 1.5rem;
+    }
+    .post-hero-img {
+      width: 100%;
+      height: 320px;
+      background: linear-gradient(135deg, #e8efff 0%, #f0f5ff 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid #dde6ff;
+    }
+    .post-hero-img span {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.8rem;
+      color: #aabcee;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* BODY */
+    .post-body {
+      max-width: 660px;
+      margin: 0 auto;
+      padding: 0 1.5rem 6rem;
+    }
+    .post-body p {
+      margin-bottom: 1.65rem;
+      font-size: 1.08rem;
+      color: #2a2a2a;
+    }
+    .post-body h2 {
+      font-size: 1.45rem;
+      letter-spacing: -0.02em;
+      line-height: 1.25;
+      margin: 2.75rem 0 1rem;
+      color: #0f0f0f;
+    }
+    .post-body strong { color: #0f0f0f; }
+
+    /* PULL QUOTE */
+    .pull-quote {
+      border-left: 3px solid #2e6bf0;
+      margin: 2.5rem 0;
+      padding: 0.25rem 0 0.25rem 1.75rem;
+      font-size: 1.25rem;
+      line-height: 1.55;
+      color: #333;
+      font-style: italic;
+    }
+
+    /* CTA BOX */
+    .cta-box {
+      background: #f0f5ff;
+      border: 1px solid #ccdaff;
+      border-radius: 12px;
+      padding: 2.25rem;
+      margin: 3rem 0;
+      text-align: center;
+    }
+    .cta-box h3 {
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .cta-box p {
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 1.5rem !important;
+    }
+    .cta-box a {
+      background: #2e6bf0;
+      color: #fff;
+      padding: 0.8rem 1.75rem;
+      border-radius: 7px;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.95rem;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .cta-box a:hover { background: #1a56d6; }
+
+    /* TAGS */
+    .post-tags {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #e8e8e4;
+    }
+    .tag {
+      background: #f0f0ec;
+      color: #666;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.78rem;
+      padding: 0.3rem 0.75rem;
+      border-radius: 20px;
+    }
+
+    .sample-badge {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: #0f0f0f;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      opacity: 0.75;
+      z-index: 100;
+    }
+
+    footer {
+      padding: 2rem 2.5rem;
+      background: #fff;
+      border-top: 1px solid #e8e8e4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer .logo { font-family: 'Georgia', serif; font-size: 1rem; font-weight: bold; }
+    footer .logo span { color: #2e6bf0; }
+    footer p { font-family: 'Arial', sans-serif; font-size: 0.8rem; color: #aaa; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Pro<span>Writer</span>Sites</div>
+    <a href="#">← Back to Blog</a>
+  </nav>
+
+  <div class="post-header">
+    <p class="post-meta">Career Advice &nbsp;·&nbsp; June 17, 2026 &nbsp;·&nbsp; 6 min read</p>
+    <h1>Why Freelancers Need More Than a Resume</h1>
+    <p class="deck">You have the clips, the credits, and the experience. So why are editors still asking for proof? Because in 2026, a resume tells them where you've been — and clients need to see what you can do for them.</p>
+    <div class="byline">
+      <div class="avatar">SL</div>
+      <div>By <strong>Sarah Lennox</strong> &nbsp;·&nbsp; Content Strategist, ProWriterSites</div>
+    </div>
+  </div>
+
+  <hr class="divider" />
+
+  <div class="post-hero">
+    <div class="post-hero-img">
+      <span>Featured Image Placeholder</span>
+    </div>
+  </div>
+
+  <div class="post-body">
+
+    <p>You've got the clips. You've got the credits. You've got a rate sheet that finally reflects your actual value.</p>
+
+    <p>So why does the same question keep showing up in your inbox?</p>
+
+    <p><em>"Do you have a portfolio I can look at?"</em></p>
+
+    <p>Because in 2026, a resume is a relic. It's a one-page summary of where you've been — not a window into what you can actually do. For freelance writers, editors, and content strategists, the gap between <em>"I'm qualified"</em> and <em>"prove it"</em> is exactly where deals go to die.</p>
+
+    <h2>A Resume Tells. A Portfolio Shows.</h2>
+
+    <p>A resume lists responsibilities. A portfolio demonstrates results.</p>
+
+    <p>When an editor scans your resume, they learn you wrote for <em>Company X.</em> When they visit your portfolio, they see the actual article that drove 40,000 pageviews, the email sequence that lifted open rates by 38%, or the long-form piece that got picked up by three national outlets.</p>
+
+    <div class="pull-quote">
+      One is a claim. The other is proof. And in a competitive market, proof is the only currency that matters.
+    </div>
+
+    <p>The best editors and agencies have been burned before — by writers who listed impressive credits but couldn't deliver when it counted. A portfolio doesn't just show what you've done. It shows how you think, how you structure an argument, and whether your voice fits what they need.</p>
+
+    <h2>The Attention Span Problem</h2>
+
+    <p>Content buyers make decisions fast. A typical editor spends six to ten seconds scanning an initial pitch before deciding whether to dig deeper. If your first impression is a PDF attachment buried below a long email, you've already lost momentum before they've read your name.</p>
+
+    <p>A portfolio site loads in under two seconds, leads with your strongest work, and guides the reader toward the next step — contacting you. PDFs get buried in inboxes. Links get clicked. The difference in response rate isn't subtle.</p>
+
+    <p><strong>Think about it from their perspective.</strong> An editor receives forty pitches on a Tuesday morning. Thirty-two of them include PDF attachments or links to a Google Doc shared with half a dozen other people. Six of them link to a clean, professional portfolio site. Which group gets read first?</p>
+
+    <h2>You're Competing Against People Who Look the Part</h2>
+
+    <p>The freelance market is crowded at every level. The gap between a writer charging $0.50 a word and one charging $1.50 a word often has nothing to do with raw talent. It has everything to do with presentation and perceived authority.</p>
+
+    <p>Two writers with nearly identical experience pitch the same editor on the same day. One sends a link to a polished, well-organized portfolio site. The other attaches a Word document and a LinkedIn URL. Who gets the assignment?</p>
+
+    <p>Every time.</p>
+
+    <p>That's not cynical — it's just how trust works. A professional-looking portfolio signals that you're serious about your work, reliable under deadlines, and worth the investment. Before an editor reads a single word of your writing, the site itself is already making that argument for you.</p>
+
+    <h2>Own Your Corner of the Internet</h2>
+
+    <p>Relying on LinkedIn, Contently, or Medium means you're renting space on someone else's platform. Algorithms shift. Layouts update without warning. Your carefully organized profile gets buried when a platform decides to redesign its feed. One morning you wake up and your clips are harder to find than they were the day before.</p>
+
+    <p>A personal portfolio site is the one piece of real estate on the web you fully control. Your design. Your structure. Your narrative. No platform can bury it, no algorithm can suppress it, and no policy change can reformat it into something unrecognizable.</p>
+
+    <p>It doesn't need to be complicated. A homepage, a curated work page, a short bio that tells a story rather than listing a timeline, and a contact form. That's it. But that simplicity — executed with intention — signals more professionalism than a twenty-page resume with a dozen platform links ever could.</p>
+
+    <div class="cta-box">
+      <h3>Ready to build yours?</h3>
+      <p>ProWriterSites builds custom portfolio websites for freelance writers. No code, no templates, live in under a week.</p>
+      <a href="#">Get Started →</a>
+    </div>
+
+    <h2>The Bottom Line</h2>
+
+    <p>Your resume gets your foot in the door. Your portfolio closes the deal.</p>
+
+    <p>If you're still routing potential clients through PDF attachments or a half-finished LinkedIn page, you're leaving real money on the table — not because your writing isn't good enough, but because you haven't given it the right stage.</p>
+
+    <p>The writers who win consistently aren't always the most talented writers in the room. They're the ones who make it effortless for editors to say yes.</p>
+
+    <p>Give them a reason. Build the portfolio.</p>
+
+    <div class="post-tags">
+      <span class="tag">Freelancing</span>
+      <span class="tag">Portfolio</span>
+      <span class="tag">Career Growth</span>
+      <span class="tag">Content Strategy</span>
+      <span class="tag">Getting Clients</span>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="logo">Pro<span>Writer</span>Sites</div>
+    <p>© 2026 ProWriterSites · All rights reserved.</p>
+  </footer>
+
+  <div class="sample-badge">Writing Sample — Blog Post</div>
+
+</body>
+</html>
