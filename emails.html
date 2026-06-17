@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ProWriterSites — Sample 3: Email Sequence</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f0f0ec;
+      color: #1a1a1a;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 2.5rem;
+      background: #fff;
+      border-bottom: 1px solid #e8e8e4;
+    }
+    nav .logo {
+      font-family: 'Georgia', serif;
+      font-size: 1.15rem;
+      font-weight: bold;
+      letter-spacing: -0.02em;
+    }
+    nav .logo span { color: #2e6bf0; }
+    nav p { font-size: 0.85rem; color: #999; }
+
+    /* PAGE HEADER */
+    .page-header {
+      background: #0f0f0f;
+      color: #fff;
+      padding: 3.5rem 1.5rem;
+      text-align: center;
+    }
+    .page-header .label {
+      font-size: 0.75rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #6b9fff;
+      margin-bottom: 1rem;
+    }
+    .page-header h1 {
+      font-family: 'Georgia', serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      max-width: 640px;
+      margin: 0 auto 1rem;
+    }
+    .page-header p {
+      font-size: 0.95rem;
+      color: #888;
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.65;
+    }
+
+    /* SEQUENCE WRAPPER */
+    .sequence {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* SEQUENCE CONNECTOR */
+    .connector {
+      text-align: center;
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #aaa;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .connector::before,
+    .connector::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #ddd;
+    }
+
+    /* EMAIL CARD */
+    .email-card {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      border: 1px solid #e8e8e4;
+    }
+
+    /* EMAIL META BAR */
+    .email-meta {
+      background: #f5f5f2;
+      border-bottom: 1px solid #e8e8e4;
+      padding: 1rem 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+    .email-num {
+      background: #2e6bf0;
+      color: #fff;
+      font-size: 0.7rem;
+      font-weight: bold;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .email-num.num-2 { background: #0f0f0f; }
+    .email-num.num-3 { background: #1a8a52; }
+    .email-meta-fields { flex: 1; }
+    .email-meta-fields table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    .email-meta-fields td {
+      font-size: 0.82rem;
+      padding: 0.18rem 0;
+      vertical-align: top;
+    }
+    .email-meta-fields td:first-child {
+      color: #aaa;
+      width: 70px;
+      font-weight: normal;
+    }
+    .email-meta-fields td:last-child {
+      color: #333;
+      font-weight: bold;
+    }
+    .email-meta-fields td.subject-line {
+      color: #0f0f0f;
+      font-size: 0.875rem;
+    }
+
+    /* EMAIL BODY */
+    .email-body {
+      padding: 2.25rem 2.5rem 2.5rem;
+      max-width: 600px;
+    }
+    .email-body p {
+      font-size: 0.98rem;
+      line-height: 1.8;
+      color: #2a2a2a;
+      margin-bottom: 1.25rem;
+    }
+    .email-body p:last-child { margin-bottom: 0; }
+    .email-body strong { color: #0f0f0f; }
+    .email-body em { color: #555; }
+
+    /* BULLET LIST */
+    .email-body ul {
+      margin: 0.25rem 0 1.25rem 0;
+      padding: 0;
+      list-style: none;
+    }
+    .email-body ul li {
+      font-size: 0.98rem;
+      line-height: 1.75;
+      color: #2a2a2a;
+      padding: 0.35rem 0 0.35rem 1.6rem;
+      position: relative;
+      border-bottom: 1px solid #f0f0ec;
+    }
+    .email-body ul li:last-child { border-bottom: none; }
+    .email-body ul li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: #2e6bf0;
+      font-weight: bold;
+    }
+    .email-body ul li strong { display: block; color: #0f0f0f; }
+    .email-body ul li span { font-size: 0.9rem; color: #777; }
+
+    /* CTA BUTTON IN EMAIL */
+    .email-cta {
+      display: inline-block;
+      background: #2e6bf0;
+      color: #fff !important;
+      padding: 0.85rem 1.75rem;
+      border-radius: 7px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 0.95rem;
+      margin: 0.5rem 0 1.25rem;
+    }
+    .email-cta:hover { background: #1a56d6; }
+    .email-cta.dark { background: #0f0f0f; }
+    .email-cta.green { background: #1a8a52; }
+
+    /* SIGNATURE */
+    .signature {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #f0f0ec;
+    }
+    .signature p {
+      font-size: 0.9rem !important;
+      color: #888 !important;
+      margin-bottom: 0.2rem !important;
+      line-height: 1.5 !important;
+    }
+    .signature .sig-name {
+      font-size: 0.95rem !important;
+      color: #333 !important;
+      font-weight: bold;
+      margin-bottom: 0.1rem !important;
+    }
+
+    /* PS LINE */
+    .ps-line {
+      background: #fafaf8;
+      border-top: 1px solid #e8e8e4;
+      padding: 1rem 2.5rem;
+      font-size: 0.85rem;
+      color: #888;
+      line-height: 1.65;
+    }
+    .ps-line strong { color: #555; }
+
+    /* ANNOTATION */
+    .annotation {
+      background: #fff9e6;
+      border: 1px solid #ffe08a;
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.8rem;
+      color: #7a6500;
+      line-height: 1.6;
+      margin-top: -1rem;
+    }
+    .annotation strong { color: #5a4a00; }
+
+    .sample-badge {
+      position: fixed;
+      bottom: 1.25rem;
+      right: 1.25rem;
+      background: #0f0f0f;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      font-size: 0.75rem;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      opacity: 0.75;
+      z-index: 100;
+    }
+
+    footer {
+      padding: 2rem 2.5rem;
+      background: #fff;
+      border-top: 1px solid #e8e8e4;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    footer .logo { font-family: 'Georgia', serif; font-size: 1rem; font-weight: bold; }
+    footer .logo span { color: #2e6bf0; }
+    footer p { font-size: 0.8rem; color: #aaa; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">Pro<span>Writer</span>Sites</div>
+    <p>Writing Sample — 3-Part Email Sequence</p>
+  </nav>
+
+  <div class="page-header">
+    <p class="label">Email Campaign Sample</p>
+    <h1>3-Part Email Sequence for Freelancers Without a Portfolio Website</h1>
+    <p>A complete nurture sequence — problem, solution, conversion — written for a cold-to-warm freelance audience.</p>
+  </div>
+
+  <div class="sequence">
+
+    <!-- EMAIL 1 -->
+    <div class="email-card">
+      <div class="email-meta">
+        <span class="email-num num-1">Email 1 of 3 — Problem</span>
+        <div class="email-meta-fields">
+          <table>
+            <tr>
+              <td>From:</td>
+              <td>Alex Rivera · ProWriterSites &lt;alex@prowritersites.com&gt;</td>
+            </tr>
+            <tr>
+              <td>To:</td>
+              <td>{{first_name}} &lt;{{email}}&gt;</td>
+            </tr>
+            <tr>
+              <td>Subject:</td>
+              <td class="subject-line">You're losing clients without knowing it</td>
+            </tr>
+            <tr>
+              <td>Timing:</td>
+              <td style="color:#aaa; font-weight:normal;">Day 1 — Send immediately after signup</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="email-body">
+        <p>Hi {{first_name}},</p>
+        <p>You're a good writer. Maybe a great one.</p>
+        <p>But right now, when an editor Googles your name, what do they find?</p>
+        <p>If the answer is a stale LinkedIn profile, a Contently page you set up in 2021, or — worse — nothing at all, you're losing work before the conversation even starts.</p>
+        <p>Every day without a professional portfolio website, you're sending a silent signal to potential clients:</p>
+        <p><em>"I'm not fully serious about this."</em></p>
+        <p>Editors notice. Agencies notice. And they move on — quickly, quietly, and without telling you why.</p>
+        <p>A resume tells people what you've done. A portfolio shows them what you can do for <em>them.</em> That difference isn't subtle. It's the gap between getting shortlisted and getting hired.</p>
+        <p>Next week, I'll show you exactly what a strong portfolio site should do — and why most freelancers get it wrong.</p>
+        <div class="signature">
+          <p class="sig-name">Alex Rivera</p>
+          <p>Founder, ProWriterSites</p>
+          <p style="margin-top: 0.5rem !important;">P.S. — If you've been meaning to build a site "at some point," I want to challenge you gently: editors are making decisions about you right now. There is no neutral.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">3 days later</div>
+
+    <!-- EMAIL 2 -->
+    <div class="email-card">
+      <div class="email-meta">
+        <span class="email-num num-2">Email 2 of 3 — Solution</span>
+        <div class="email-meta-fields">
+          <table>
+            <tr>
+              <td>From:</td>
+              <td>Alex Rivera · ProWriterSites &lt;alex@prowritersites.com&gt;</td>
+            </tr>
+            <tr>
+              <td>To:</td>
+              <td>{{first_name}} &lt;{{email}}&gt;</td>
+            </tr>
+            <tr>
+              <td>Subject:</td>
+              <td class="subject-line">What a strong portfolio site actually does</td>
+            </tr>
+            <tr>
+              <td>Timing:</td>
+              <td style="color:#aaa; font-weight:normal;">Day 4 — Send 3 days after Email 1</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="email-body">
+        <p>Hi {{first_name}},</p>
+        <p>A portfolio site isn't a digital business card. It's a sales page that works for you 24 hours a day, seven days a week — while you're writing, sleeping, or ignoring your inbox.</p>
+        <p>Here's what the best freelance portfolio sites get right:</p>
+        <ul>
+          <li>
+            <strong>They lead with the best work — not all the work.</strong>
+            <span>Three to five pieces that represent your highest skill level and most relevant results. Editors don't have time for everything. Give them the highlights and let the writing close the deal.</span>
+          </li>
+          <li>
+            <strong>They make the next step impossible to miss.</strong>
+            <span>A clear "Hire Me" or "Get in Touch" button above the fold. No hunting. No guessing. The editor knows exactly what to do — and they can do it in under ten seconds.</span>
+          </li>
+          <li>
+            <strong>They tell a story, not a timeline.</strong>
+            <span>Your bio isn't a list of previous employers. It's a narrative about who you help, how you help them, and why you're the right person for the job. That specificity builds trust before they've read a word of your clips.</span>
+          </li>
+          <li>
+            <strong>They load fast and look right on every device.</strong>
+            <span>If your site takes more than three seconds to load on mobile, you've lost the editor before they've seen your name. Speed and mobile optimization aren't optional anymore — they're baseline.</span>
+          </li>
+        </ul>
+        <p>That's the benchmark. Does your current online presence clear all four?</p>
+        <p>In my next email, I'll show you how we can build this for you — quickly, without the technical headache, and for less than you'd expect.</p>
+        <div class="signature">
+          <p class="sig-name">Alex Rivera</p>
+          <p>Founder, ProWriterSites</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="connector">4 days later</div>
+
+    <!-- EMAIL 3 -->
+    <div class="email-card">
+      <div class="email-meta">
+        <span class="email-num num-3">Email 3 of 3 — CTA</span>
+        <div class="email-meta-fields">
+          <table>
+            <tr>
+              <td>From:</td>
+              <td>Alex Rivera · ProWriterSites &lt;alex@prowritersites.com&gt;</td>
+            </tr>
+            <tr>
+              <td>To:</td>
+              <td>{{first_name}} &lt;{{email}}&gt;</td>
+            </tr>
+            <tr>
+              <td>Subject:</td>
+              <td class="subject-line">Let's build your portfolio this week</td>
+            </tr>
+            <tr>
+              <td>Timing:</td>
+              <td style="color:#aaa; font-weight:normal;">Day 8 — Send 4 days after Email 2</td>
+            </tr>
+          </table>
+        </div>
+      </div>
+      <div class="email-body">
+        <p>Hi {{first_name}},</p>
+        <p>You know you need a portfolio. You know what it should do. The only question left is when you're going to make it happen.</p>
+        <p>I know what's in the way.</p>
+        <p><em>"I'll get to it when things slow down."</em><br>
+        <em>"I'm not sure how to set it up properly."</em><br>
+        <em>"What if it doesn't look the way I want it to?"</em></p>
+        <p>I've heard every version of those three sentences. And I understand them, genuinely — building something professional from scratch takes time and skill that most writers would rather spend on writing.</p>
+        <p>That's exactly why we exist.</p>
+        <p><strong>Here's how it works:</strong> You send us your three to five best clips, a few notes on your niche and the kind of clients you want to attract, and your honest thoughts on tone and style. We handle everything else — design, copy structure, mobile optimization, domain setup, and launch.</p>
+        <p>In under a week, you'll have a site that puts you in the top tier of how freelancers present themselves online. Not because of bells and whistles — because of clarity, craft, and intention.</p>
+        <a href="#" class="email-cta green">Get Your Portfolio Live →</a>
+        <p>Reply to this email with any questions and I'll answer them personally. No sales team, no automated response — just me.</p>
+        <div class="signature">
+          <p class="sig-name">Alex Rivera</p>
+          <p>Founder, ProWriterSites</p>
+          <p style="margin-top:0.5rem !important;">Setup starts at $299 · Live in under 7 days · You own everything.</p>
+        </div>
+      </div>
+      <div class="ps-line">
+        <strong>P.S.</strong> — Still not sure? Consider this: every day you don't have a portfolio is a day an editor compares you to someone who does. You're a great writer. Stop letting your online presence be the reason they choose someone else.
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="logo">Pro<span>Writer</span>Sites</div>
+    <p>© 2026 ProWriterSites · All rights reserved.</p>
+  </footer>
+
+  <div class="sample-badge">Writing Sample — Email Sequence</div>
+
+</body>
+</html>
